@@ -1,0 +1,14 @@
+{
+  "name": "device.js",
+  "version": "0.0.2",
+  "homepage": "https://github.com/frangucc/Readmore.js",
+  "_release": "0.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.2",
+    "commit": "ee6a587b27b3c66cffb7d7669dc7a95bbcda057d"
+  },
+  "_source": "git://github.com/frangucc/Readmore.js.git",
+  "_target": "*",
+  "_originalSource": "readmore.js"
+}
