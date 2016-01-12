@@ -30,7 +30,8 @@ var Calculator = function() {
         animation: {'startup': true}
 
     };
-
+    
+    // slider events
     this.homePrice = $('#home_price').slider()
         .on('slide', {
             self: self
@@ -55,19 +56,18 @@ var Calculator = function() {
         }, self.update)
         .data('slider');
 
-    this.update();
+
 
 };
 
 Calculator.prototype.update = function(e) {
-    (e) ? e.data.self.setValues(): this.setValues();
-    (e) ? e.data.self.updateView(): this.updateView();
-    (e) ? e.data.self.drawChart(): this.drawChart();
+    (e) ? e.data.self.setValues(): this.setValues(); // calculate all values
+    (e) ? e.data.self.updateView(): this.updateView(); // update the html page
+    (e) ? e.data.self.drawChart(): this.drawChart(); // draw google chart with updated values
 };
 
 Calculator.prototype.updateView = function() {
-    // update Sliders values
-    // --- Home price
+    // update all values in the html page
     $('#home_price_value').text(this.homePriceValue).priceFormat({
         prefix: '',
         suffix: '  <small>AED</small>',
@@ -82,10 +82,8 @@ Calculator.prototype.updateView = function() {
     });
     $('#down_payment_percent').text(parseInt(this.downPayment.getValue()) + ' %');
     $('#calculated_loan_amount').val(parseInt(this.homePriceValue * (1 - this.downPaymentValue)));
-    // --- Interest rate
     $('#interest_rate_value').text(parseFloat(this.intRate.getValue()).toFixed(2) + ' %');
     $('#interest_rate').val(parseFloat(this.intRate.getValue()).toFixed(2));
-    // --- Term Val
     $('#long_term_value').text(parseInt(this.longTermValue) + ' years');
 
 
@@ -114,10 +112,10 @@ Calculator.prototype.updateView = function() {
     $('#display_required_upfront').text(this.currencyFormat((this.downPaymentValue + this.totalExtra), 0));
 
     $('#monthly_payment').val(this.monthlyPayment.toFixed(2));
-
     $('#monthly_payment_calculated').text(this.currencyFormat(this.monthlyPayment, 0));
-
 };
+
+
 
 Calculator.prototype.setValues = function() {
 
@@ -148,7 +146,7 @@ Calculator.prototype.setValues = function() {
 };
 
 
-Calculator.prototype.drawChart = function(interestAmt, principalAmt) {
+Calculator.prototype.drawChart = function() {
 
     var data = new google.visualization.arrayToDataTable([
         ['Task', 'Monthly Payments'],
@@ -190,12 +188,16 @@ $(function() {
         slidesToShow: 5,
         slidesToScroll: 1
     });
-    
+
+    // instantiate the calculator
+    calculator = new Calculator();
+    // google chart lib loaded, can update the calculator app.
     google.charts.setOnLoadCallback(function() {
-        calculator = new Calculator();
+        // update the application
+        calculator.update();
     });
 });
 
-// start the application after loading google chart
-var calculator;
+
+
  google.charts.load('current', {packages: ['corechart']});
